@@ -1,0 +1,47 @@
+<div class="container">
+  <div class="row">
+      <section class="content">
+          <div class="col-md-8 col-md-offset-2">
+              <h1>List of Players</h1>
+              <div class="panel panel-default">
+                  <input type="text" name="search" class="form-control" placeholder="Search" [(ngModel)]="searchData">
+                  <div class="panel-body">
+                      <div class="pull-right">
+                      </div>
+                      <div *ngIf="( todoDetail | async)?.length <= 0" [ngStyle]="{'width':'auto' ,'text-align': 'center','color': 'red'}">
+                          No Todo Available
+                      </div>
+                      <div class="table-resposive" *ngIf="( todoDetail | async)?.length > 0">
+                          <table class="table table-filter">
+                              <tbody>
+                                  <tr *ngFor="let todoList of ( todoDetail | filterTodos | async  | searchBy : searchData ) ; let i = index"
+                                      [@todoState]="stateExpression" [routerLink]="['/todoDetail', i + 1]">
+                                      <td>
+                                          {{i + 1}}
+                                      </td>
+                                      <td (click)="deleteData(i )" >
+                                          <i class="fa fa-times" aria-hidden="true"></i>
+                                      </td>
+                                      <td>
+                                          <div class="media">
+                                              
+                                              <h4 class="title" (mouseenter)="mouseEnter()" (mouseleave)="mouseLeave()">
+                                                  {{todoList?.firstName | capitalizeFirst }} 
+                                                  {{todoList?.lastName}} 
+                                                  Born on {{todoList?.dob | date :'shortDate' }}
+                                              </h4>
+
+                                              
+                                          </div>
+                                      </td>
+                                  </tr>
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+      </section>
+  </div>
+</div>
