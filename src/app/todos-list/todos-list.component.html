@@ -14,7 +14,8 @@
                       <div class="table-resposive" *ngIf="( todoDetail | async)?.length > 0">
                           <table class="table table-filter">
                               <tbody>
-                                  <tr *ngFor="let todoList of ( todoDetail | filterTodos | async  | searchBy : searchData ) ; let i = index"
+                                  <tr [@flyInOut]="in" (@flyInOut.start)="animationStarted($event)" (@flyInOut.done)="animationDone($event)"
+                                      *ngFor="let todoList of ( todoDetail | filterTodos | async  | searchBy : searchData ) ; let i = index"
                                       [@todoState]="stateExpression" [routerLink]="['/todoDetail', i + 1]">
                                       <td>
                                           {{i + 1}}

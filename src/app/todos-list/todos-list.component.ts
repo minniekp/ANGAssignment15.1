@@ -16,11 +16,45 @@ declare const alertify: any;
           backgroundColor: '#cfd8dc',
           transform: 'scale(1.1)'
         })),
+        state('inactive', style({
+          backgroundColor: '#fff',
+          transform: 'scale(1)'
+        })),
+        transition('inactive => active', animate('500ms ease-in')),
+        transition('active => inactive', animate('500ms ease-out'))
       ]
     ),
+    trigger('flyInOut', [
+      state('in', style({ transform: 'translateX(0)' })),
+      transition(':enter', [
+        style({ transform: 'translateX(-100%)' }),
+        animate(400, keyframes([
+          style({ backgroundColor: "red" }), // offset = 0
+          style({ backgroundColor: "blue" }), // offset = 0.33
+          style({ backgroundColor: "orange" }), // offset = 0.66
+          style({ backgroundColor: "black" }) // offset = 1
+        ]))
+      ]),
+      transition(':leave', [
+        style({ width: 10, transform: 'translateX(50px)', opacity: 0 }),
+        group([
+          animate('0.100s 0.1s ease', style({
+            transform: 'translateX(0)',
+            width: 120
+          })),
+          animate('0.3s ease', style({
+            opacity: 1
+          }))
+        ])
+      ])
+    ])
+
   ]
 })
 export class TodosListComponent implements OnInit {
+
+  stateExpression: String;
+  
 
   todoDetail: Observable<ITodoList[]> | any[];
   private searchData: string;
@@ -46,5 +80,22 @@ export class TodosListComponent implements OnInit {
     },
       error => console.log(error));
   };
+
+  mouseEnter() {
+    this.activeState();
+  }
+  mouseLeave() {
+    this.inactiveState();
+  }
+  inactiveState() { this.stateExpression = 'inactive'; }
+  activeState() { this.stateExpression = 'active'; }
+
+  animationStarted(e) {
+    console.log('Animation Started', e)
+  }
+  
+  animationDone(e) {
+    console.log('Animation Done', e)
+  }
 
 }
